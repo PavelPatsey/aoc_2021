@@ -35,10 +35,13 @@ def get_first_illegal_character(seq):
 
 def main():
     data = read_input()
-    illegal_charactes = filter(lambda x: x != None, map(get_first_illegal_character, data))
+    illegal_charactes = filter(
+        lambda x: x != None, map(get_first_illegal_character, data)
+    )
     scores = map(lambda x: SCORES[x], illegal_charactes)
     scores_sum = reduce(lambda acc, x: acc + x, scores, 0)
     print(scores_sum)
+
 
 if __name__ == "__main__":
     main()
