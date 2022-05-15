@@ -41,6 +41,7 @@ def main():
     scores = map(lambda x: SCORES[x], illegal_charactes)
     scores_sum = reduce(lambda acc, x: acc + x, scores, 0)
     print(scores_sum)
+    # 392421
 
 
 if __name__ == "__main__":
