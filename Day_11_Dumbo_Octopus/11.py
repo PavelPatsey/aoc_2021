@@ -1,5 +1,4 @@
 INPUT = "input"
-from pprint import pprint
 
 
 def reset(octopuses):
@@ -60,8 +59,20 @@ def get_flashes_amount(octopuses, steps_number):
     for _ in range(steps_number):
         octopuses = flash(octopuses)
         octopuses = reset(octopuses)
-        counter += get_flashed_number(octopuses)
+        flashed_number = get_flashed_number(octopuses)
+        counter += flashed_number
     return counter
+
+
+def get_synchronizing_step_number(octopuses):
+    flashed_number = None
+    step = 0
+    while flashed_number != 100:
+        octopuses = flash(octopuses)
+        octopuses = reset(octopuses)
+        flashed_number = get_flashed_number(octopuses)
+        step += 1
+    return step
 
 
 def read_input():
@@ -73,6 +84,7 @@ def read_input():
 def main():
     octopuses = read_input()
     print(get_flashes_amount(octopuses, 100))
+    print(get_synchronizing_step_number(octopuses))
 
 
 if __name__ == "__main__":
