@@ -1,4 +1,14 @@
-INPUT = "test_input"
+INPUT = "input"
+from pprint import pprint
+
+
+def reset(octopuses):
+    N = len(octopuses[0])
+    for i in range(N):
+        for j in range(N):
+            if octopuses[i][j] == -1:
+                octopuses[i][j] = 0
+    return octopuses
 
 
 def flash_octopus(octopuses, i, j):
@@ -16,14 +26,20 @@ def flash_octopus(octopuses, i, j):
 
 
 def get_flashed_number(octopuses):
-    pass
+    counter = 0
+    N = len(octopuses[0])
+    for i in range(N):
+        for j in range(N):
+            if octopuses[i][j] == 0:
+                counter += 1
+    return counter
 
 
 def get_not_flashed_octopus_indexes(octopuses):
     N = len(octopuses[0])
     for i in range(N):
         for j in range(N):
-            if octopuses[i][j] >= 9:
+            if octopuses[i][j] > 9:
                 return i, j
     return False
 
@@ -33,7 +49,6 @@ def flash(octopuses):
 
     indexes = get_not_flashed_octopus_indexes(octopuses)
     while indexes:
-        print(indexes)
         octopuses = flash_octopus(octopuses, *indexes)
         indexes = get_not_flashed_octopus_indexes(octopuses)
 
@@ -44,6 +59,9 @@ def get_flashes_amount(octopuses, steps_number):
     counter = 0
     for _ in range(steps_number):
         octopuses = flash(octopuses)
+        octopuses = reset(octopuses)
+        counter += get_flashed_number(octopuses)
+    return counter
 
 
 def read_input():
@@ -54,7 +72,7 @@ def read_input():
 
 def main():
     octopuses = read_input()
-    print(octopuses)
+    print(get_flashes_amount(octopuses, 100))
 
 
 if __name__ == "__main__":
@@ -77,7 +95,7 @@ if __name__ == "__main__":
             [1, 2],
             [9, 10],
         ]
-    ) == (1, 0)
+    ) == (1, 1)
 
     octopuses_step_0 = [
         [5, 4, 8, 3, 1, 4, 3, 2, 2, 3],
@@ -103,7 +121,21 @@ if __name__ == "__main__":
         [5, 9, 5, 7, 9, 5, 9, 6, 6, 5],
         [6, 3, 9, 4, 8, 6, 2, 6, 3, 7],
     ]
+    octopuses_step_2 = [
+        [8, 8, 0, 7, 4, 7, 6, 5, 5, 5],
+        [5, 0, 8, 9, 0, 8, 7, 0, 5, 4],
+        [8, 5, 9, 7, 8, 8, 9, 6, 0, 8],
+        [8, 4, 8, 5, 7, 6, 9, 6, 0, 0],
+        [8, 7, 0, 0, 9, 0, 8, 8, 0, 0],
+        [6, 6, 0, 0, 0, 8, 8, 9, 8, 9],
+        [6, 8, 0, 0, 0, 0, 5, 9, 4, 3],
+        [0, 0, 0, 0, 0, 0, 7, 4, 5, 6],
+        [9, 0, 0, 0, 0, 0, 0, 8, 7, 6],
+        [8, 7, 0, 0, 0, 0, 6, 8, 4, 8],
+    ]
+    assert reset(flash(octopuses_step_0)) == octopuses_step_1
+    assert reset(flash(octopuses_step_1)) == octopuses_step_2
 
-    assert flash(octopuses_step_0) == octopuses_step_1
+    assert get_flashed_number(octopuses_step_2) == 35
 
     main()
